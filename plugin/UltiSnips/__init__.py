@@ -430,9 +430,13 @@ class VisualContentPreserver(object):
         self._text = as_unicode("")
 
     def conserve(self):
-        sl, sc = map(int, (_vim.eval("""line("'<")"""), _vim.eval("""virtcol("'<")""")))
-        el, ec = map(int, (_vim.eval("""line("'>")"""), _vim.eval("""virtcol("'>")""")))
         self._mode = _vim.eval("visualmode()")
+        if self._mode == "V":
+            sl, sc = map(int, (_vim.eval("""line("'<")"""), _vim.eval("""virtcol("'<")""")))
+            el, ec = map(int, (_vim.eval("""line("'>")"""), _vim.eval("""virtcol("'>")""")))
+        else:
+            sl, sc = map(int, (_vim.eval("""line("'<")"""), _vim.eval("""col("'<")""")))
+            el, ec = map(int, (_vim.eval("""line("'>")"""), _vim.eval("""col("'>")""")))
 
         def _vim_line_with_eol(ln):
             return _vim.buf[ln] + '\n'
